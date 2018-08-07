@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ResidentalData" Class="ResidentalCalcDataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=sql-test;Initial Catalog=ResidentalData;Integrated Security=True" SettingsObjectName="ResidentalCalc.Properties.Settings" SettingsPropertyName="ResidentalDataConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.SupplyResourceContract" Member="SupplyResourceContract">
+    <Type Name="SupplyResourceContract">
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ContractNumber" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="SigningDateStart" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="SigningDateEnd" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="ContractState" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="GIS_ContractRootGUID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="SupplyResourceContract_ObjectAddress" Member="ObjectAddress" ThisKey="GUID" OtherKey="SupplyResourceContractGUID" Type="ObjectAddress" />
+      <Association Name="SupplyResourceContract_ContractSubject" Member="ContractSubject" ThisKey="GUID" OtherKey="SupplyResourceContractGUID" Type="ContractSubject" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Accounts" Member="Accounts">
+    <Type Name="Accounts">
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ObjectAddressGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="AccountNumber" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="AccountState" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="LivingPersonsNumber" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GIS_AccountGUID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="Accounts_PayerInfo" Member="PayerInfo" ThisKey="GUID" OtherKey="AccountGUID" Type="PayerInfo" />
+      <Association Name="Accounts_Calculation" Member="Calculation" ThisKey="GUID" OtherKey="AccountGUID" Type="Calculation" />
+      <Association Name="ObjectAddress_Accounts" Member="ObjectAddress" ThisKey="ObjectAddressGUID" OtherKey="GUID" Type="ObjectAddress" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MeteringDevice" Member="MeteringDevice">
+    <Type Name="MeteringDevice">
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ObjectAddressGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="MeteringDeviceModel" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="MeteringDeviceStamp" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="MeteringDeviceNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="VerificationInterval" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InstallationDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="VerificationDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="GIS_MeteringDeviceGUID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="MeteringDevice_MeteringDeviceHistory" Member="MeteringDeviceHistory" ThisKey="GUID" OtherKey="MeteringDeviceGUID" Type="MeteringDeviceHistory" />
+      <Association Name="MeteringDevice_ChargeInfo" Member="ChargeInfo" ThisKey="GUID" OtherKey="MeteringDeviceGUID" Type="ChargeInfo" />
+      <Association Name="ObjectAddress_MeteringDevice" Member="ObjectAddress" ThisKey="ObjectAddressGUID" OtherKey="GUID" Type="ObjectAddress" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MeteringDeviceHistory" Member="MeteringDeviceHistory">
+    <Type Name="MeteringDeviceHistory">
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MeteringDeviceGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="MeteringDeviceValue" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="MeteringDeviceDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Association Name="MeteringDevice_MeteringDeviceHistory" Member="MeteringDevice" ThisKey="MeteringDeviceGUID" OtherKey="GUID" Type="MeteringDevice" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ObjectAddress" Member="ObjectAddress">
+    <Type Name="ObjectAddress">
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SupplyResourceContractGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="FIASHouseGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Apartment" Type="System.String" DbType="NVarChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="LivingRoom" Type="System.String" DbType="NVarChar(5)" CanBeNull="true" />
+      <Column Name="GIS_ObjectGUID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="ObjectAddress_Accounts" Member="Accounts" ThisKey="GUID" OtherKey="ObjectAddressGUID" Type="Accounts" />
+      <Association Name="ObjectAddress_MeteringDevice" Member="MeteringDevice" ThisKey="GUID" OtherKey="ObjectAddressGUID" Type="MeteringDevice" />
+      <Association Name="SupplyResourceContract_ObjectAddress" Member="SupplyResourceContract" ThisKey="SupplyResourceContractGUID" OtherKey="GUID" Type="SupplyResourceContract" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PayerInfo" Member="PayerInfo">
+    <Type Name="PayerInfo">
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AccountGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Surname" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="GrandName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SNILS" Type="System.String" DbType="NVarChar(11)" CanBeNull="true" />
+      <Column Name="Series" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Number" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="IssueDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Association Name="Accounts_PayerInfo" Member="Accounts" ThisKey="AccountGUID" OtherKey="GUID" Type="Accounts" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RefNsiService51" Member="RefNsiService51">
+    <Type Name="RefNsiService51">
+      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="IsActual" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="RefNsiService51_RefServices" Member="RefServices" ThisKey="ID" OtherKey="NsiService51ID" Type="RefServices" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RefServices" Member="RefServices">
+    <Type Name="RefServices">
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ServiceName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TariffGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="StandardGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="NsiService51ID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="RefServices_ContractSubject" Member="ContractSubject" ThisKey="GUID" OtherKey="ServiceGUID" Type="ContractSubject" />
+      <Association Name="RefNsiService51_RefServices" Member="RefNsiService51" ThisKey="NsiService51ID" OtherKey="ID" Type="RefNsiService51" IsForeignKey="true" />
+      <Association Name="RefStandard_RefServices" Member="RefStandard" ThisKey="StandardGUID" OtherKey="GUID" Type="RefStandard" IsForeignKey="true" />
+      <Association Name="RefTariff_RefServices" Member="RefTariff" ThisKey="TariffGUID" OtherKey="GUID" Type="RefTariff" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RefStandard" Member="RefStandard">
+    <Type Name="RefStandard">
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StandardName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="StandardValue" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Association Name="RefStandard_RefServices" Member="RefServices" ThisKey="GUID" OtherKey="StandardGUID" Type="RefServices" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RefTariff" Member="RefTariff">
+    <Type Name="RefTariff">
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TariffName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TariffValue" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Association Name="RefTariff_RefServices" Member="RefServices" ThisKey="GUID" OtherKey="TariffGUID" Type="RefServices" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ContractSubject" Member="ContractSubject">
+    <Type Name="ContractSubject">
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BeginDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="ServiceGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="SupplyResourceContractGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="ContractSubject_ChargeInfo" Member="ChargeInfo" ThisKey="GUID" OtherKey="ContractSubjectGUID" Type="ChargeInfo" />
+      <Association Name="RefServices_ContractSubject" Member="RefServices" ThisKey="ServiceGUID" OtherKey="GUID" Type="RefServices" IsForeignKey="true" />
+      <Association Name="SupplyResourceContract_ContractSubject" Member="SupplyResourceContract" ThisKey="SupplyResourceContractGUID" OtherKey="GUID" Type="SupplyResourceContract" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ChargeInfo" Member="ChargeInfo">
+    <Type Name="ChargeInfo">
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CalculationGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ContractSubjectGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Volume" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="CalculationResult" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="VolumeDeterminingMethod" Type="System.String" DbType="NVarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="MeteringDeviceGUID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="ContractSubject_ChargeInfo" Member="ContractSubject" ThisKey="ContractSubjectGUID" OtherKey="GUID" Type="ContractSubject" IsForeignKey="true" />
+      <Association Name="MeteringDevice_ChargeInfo" Member="MeteringDevice" ThisKey="MeteringDeviceGUID" OtherKey="GUID" Type="MeteringDevice" IsForeignKey="true" />
+      <Association Name="Calculation_ChargeInfo" Member="Calculation" ThisKey="CalculationGUID" OtherKey="GUID" Type="Calculation" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.vwChargeInfo" Member="vwChargeInfo">
+    <Type Name="vwChargeInfo">
+      <Column Name="CalculationGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ContractSubjectGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Volume" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="CalculationResult" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="VolumeDeterminingMethodChar" Type="System.String" DbType="NVarChar(1) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Calculation" Member="Calculation">
+    <Type Name="Calculation">
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AccountGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="CalculationMonth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CalculationYear" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GIS_PaymentDocumentNumber" Type="System.String" DbType="NVarChar(18)" CanBeNull="true" />
+      <Association Name="Calculation_ChargeInfo" Member="ChargeInfo" ThisKey="GUID" OtherKey="CalculationGUID" Type="ChargeInfo" />
+      <Association Name="Accounts_Calculation" Member="Accounts" ThisKey="AccountGUID" OtherKey="GUID" Type="Accounts" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.spInsertSupplyResourceContract" Method="spInsertSupplyResourceContract">
+    <Parameter Name="ContractNumber" Parameter="contractNumber" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="SigningDateStart" Parameter="signingDateStart" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="SigningDateEnd" Parameter="signingDateEnd" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="ContractState" Parameter="contractState" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="GIS_ContractRootGUID" Parameter="gIS_ContractRootGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spCreateChargeInfo" Method="spCreateChargeInfo" IsComposable="true">
+    <Parameter Name="RowGUID" Parameter="rowGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="AccountGUID" Parameter="accountGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="CalculationMonth" Parameter="calculationMonth" Type="System.Int32" DbType="Int" />
+    <Parameter Name="CalculationYear" Parameter="calculationYear" Type="System.Int32" DbType="Int" />
+    <Return Type="object" />
+  </Function>
+  <Function Name="dbo.spInsertAccount" Method="spInsertAccount">
+    <Parameter Name="ObjectAddressGUID" Parameter="objectAddressGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="AccountNumber" Parameter="accountNumber" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="AccountState" Parameter="accountState" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="LivingPersonsNumber" Parameter="livingPersonsNumber" Type="System.Int32" DbType="Int" />
+    <Parameter Name="GIS_AccountGUID" Parameter="gIS_AccountGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spInsertCalculationData" Method="spInsertCalculationData">
+    <Parameter Name="RowGUID" Parameter="rowGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="AccountIndividualServicesGUID" Parameter="accountIndividualServicesGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="MeteringDeviceGUID" Parameter="meteringDeviceGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="CalculationResult" Parameter="calculationResult" Type="System.Decimal" DbType="Decimal(18,2)" />
+    <Parameter Name="CalculationVolume" Parameter="calculationVolume" Type="System.Decimal" DbType="Decimal(18,2)" />
+    <Parameter Name="VolumeDeterminingMethod" Parameter="volumeDeterminingMethod" Type="System.String" DbType="NVarChar(1)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spInsertMeteringDevice" Method="spInsertMeteringDevice">
+    <Parameter Name="ObjectAddressGUID" Parameter="objectAddressGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="MeteringDeviceModel" Parameter="meteringDeviceModel" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="MeteringDeviceStamp" Parameter="meteringDeviceStamp" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="MeteringDeviceNumber" Parameter="meteringDeviceNumber" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="VerificationInterval" Parameter="verificationInterval" Type="System.Int32" DbType="Int" />
+    <Parameter Name="InstallationDate" Parameter="installationDate" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="VerificationDate" Parameter="verificationDate" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="GIS_MeteringDeviceGUID" Parameter="gIS_MeteringDeviceGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spInsertMeteringDeviceHistory" Method="spInsertMeteringDeviceHistory">
+    <Parameter Name="MeteringDeviceGUID" Parameter="meteringDeviceGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="MeteringDeviceValue" Parameter="meteringDeviceValue" Type="System.Decimal" DbType="Decimal(18,2)" />
+    <Parameter Name="MeteringDeviceDate" Parameter="meteringDeviceDate" Type="System.DateTime" DbType="Date" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spInsertObjectAddress" Method="spInsertObjectAddress">
+    <Parameter Name="SupplyResourceContractGUID" Parameter="supplyResourceContractGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="FIASHouseGUID" Parameter="fIASHouseGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="Apartment" Parameter="apartment" Type="System.String" DbType="NVarChar(5)" />
+    <Parameter Name="LivingRoom" Parameter="livingRoom" Type="System.String" DbType="NVarChar(5)" />
+    <Parameter Name="GIS_ObjectGUID" Parameter="gIS_ObjectGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spInsertPayerInfo" Method="spInsertPayerInfo">
+    <Parameter Name="AccountGUID" Parameter="accountGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="Surname" Parameter="surname" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="GrandName" Parameter="grandName" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="SNILS" Parameter="sNILS" Type="System.String" DbType="NVarChar(11)" />
+    <Parameter Name="Series" Parameter="series" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Number" Parameter="number" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="IssueDate" Parameter="issueDate" Type="System.DateTime" DbType="Date" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spInsertRefNsiService51" Method="spInsertRefNsiService51">
+    <Parameter Name="Code" Parameter="code" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="GUID" Parameter="gUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="IsActual" Parameter="isActual" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Value" Parameter="value" Type="System.String" DbType="NVarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.fnIsMeteringDevice" Method="fnIsMeteringDevice" IsComposable="true">
+    <Parameter Name="MeteringDeviceGUID" Parameter="meteringDeviceGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="CalculationMonth" Parameter="calculationMonth" Type="System.Int32" DbType="Int" />
+    <Parameter Name="CalculationYear" Parameter="calculationYear" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Decimal" />
+  </Function>
+  <Function Name="dbo.fnCalculationAverage" Method="fnCalculationAverage" IsComposable="true">
+    <Parameter Name="IsAverageVolume" Parameter="isAverageVolume" Type="System.Decimal" DbType="Decimal(18,2)" />
+    <Parameter Name="AccountIndividualServicesGUID" Parameter="accountIndividualServicesGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <ElementType Name="fnCalculationAverageResult">
+      <Column Name="Volume" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Tariff" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Result" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.fnCalculationReading" Method="fnCalculationReading" IsComposable="true">
+    <Parameter Name="IsMeteringDevice" Parameter="isMeteringDevice" Type="System.Decimal" DbType="Decimal(18,2)" />
+    <Parameter Name="AccountIndividualServicesGUID" Parameter="accountIndividualServicesGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <ElementType Name="fnCalculationReadingResult">
+      <Column Name="Volume" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Tariff" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Result" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.fnCalculationStandard" Method="fnCalculationStandard" IsComposable="true">
+    <Parameter Name="AccountGUID" Parameter="accountGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="AccountIndividualServicesGUID" Parameter="accountIndividualServicesGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <ElementType Name="fnCalculationStandardResult">
+      <Column Name="Volume" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Tariff" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Result" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.fnGetAccountIndividualServicesStandard" Method="fnGetAccountIndividualServicesStandard" IsComposable="true">
+    <Parameter Name="AccountIndividualServicesGUID" Parameter="accountIndividualServicesGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Decimal" />
+  </Function>
+  <Function Name="dbo.fnGetAccountIndividualServicesTariff" Method="fnGetAccountIndividualServicesTariff" IsComposable="true">
+    <Parameter Name="AccountIndividualServicesGUID" Parameter="accountIndividualServicesGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Decimal" />
+  </Function>
+  <Function Name="dbo.fnGetAccountLivingPersonsNumber" Method="fnGetAccountLivingPersonsNumber" IsComposable="true">
+    <Parameter Name="AccountGUID" Parameter="accountGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.fnGetMeteringDeviceVolume" Method="fnGetMeteringDeviceVolume" IsComposable="true">
+    <Parameter Name="MeteringDeviceGUID" Parameter="meteringDeviceGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="Month" Parameter="month" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Year" Parameter="year" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Decimal" />
+  </Function>
+  <Function Name="dbo.fnIsAverageVolume" Method="fnIsAverageVolume" IsComposable="true">
+    <Parameter Name="MeteringDeviceGUID" Parameter="meteringDeviceGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="CalculationMonth" Parameter="calculationMonth" Type="System.Int32" DbType="Int" />
+    <Parameter Name="CalculationYear" Parameter="calculationYear" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Decimal" />
+  </Function>
+  <Function Name="dbo.spInsertContractSubject" Method="spInsertContractSubject">
+    <Parameter Name="BeginDate" Parameter="beginDate" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="EndDate" Parameter="endDate" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="ServiceGUID" Parameter="serviceGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="SupplyResourceContractGUID" Parameter="supplyResourceContractGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spCreateCalculation" Method="spCreateCalculation">
+    <Parameter Name="AccountGUID" Parameter="accountGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="CalculationMonth" Parameter="calculationMonth" Type="System.Int32" DbType="Int" />
+    <Parameter Name="CalculationYear" Parameter="calculationYear" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>
