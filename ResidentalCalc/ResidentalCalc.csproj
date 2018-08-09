@@ -74,8 +74,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ResidentalCalcDataClasses.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Updaters\UpdaterAccounts.cs" />
     <Compile Include="Updaters\UpdaterMeteringDevice.cs" />
+    <Compile Include="Updaters\UpdaterMeteringDeviceHistory.cs" />
     <Compile Include="Updaters\UpdaterObjectAddress.cs" />
+    <Compile Include="Updaters\UpdaterPayerInfo.cs" />
     <Compile Include="Updaters\UpdaterRefNsiService51.cs" />
     <Compile Include="Updaters\UpdaterSupplyResourceContract.cs" />
   </ItemGroup>

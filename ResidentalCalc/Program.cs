@@ -18,6 +18,9 @@ using ResidentalCalc.Updaters.UpdaterRefNsiService51;
 using ResidentalCalc.Updaters.UpdaterMeteringDevice;
 using ResidentalCalc.Updaters.UpdaterSupplyResourceContract;
 using ResidentalCalc.Updaters.UpdaterObjectAddress;
+using ResidentalCalc.Updaters.UpdaterPayerInfo;
+using ResidentalCalc.Updaters.UpdaterAccounts;
+using ResidentalCalc.Updaters.UpdaterMeteringDeviceHistory;
 
 namespace ResidentalCalc
 {
@@ -112,7 +115,7 @@ namespace ResidentalCalc
             while (typeRes != "True");
             #endregion
 
-            #region Синхронизация предметов договора
+            #region Синхронизируем предметы договора
             Table<ContractSubject> contractSubject = db.GetTable<ContractSubject>();
 
             foreach (var item in supplyResourceContracts.Where(s => s.GIS_ContractRootGUID != null))
@@ -183,12 +186,8 @@ namespace ResidentalCalc
                         if(!(accounts.Any(obj => obj.GIS_AccountGUID == Guid.Parse(tmpAccount.AccountGUID)
                         && obj.ObjectAddressGUID == item.GUID)))
                         {
-                            db.spInsertAccount(Guid.Parse(item.GUID.ToString()),
-                                tmpAccount.AccountNumber,
-                                true,
-                                int.Parse(tmpAccount.LivingPersonsNumber ?? "2"),
-                                Guid.Parse(tmpAccount.AccountGUID));
-                            Console.WriteLine("Account is synchronized");
+                            string res = UpdaterAccounts.InsertAccount(item, tmpAccount);
+                            Console.WriteLine(res);
                         }
                         else
                         {
@@ -252,10 +251,8 @@ namespace ResidentalCalc
                             if (!(meteringDeviceHistory.Any(obj => obj.MeteringDeviceDate == tmpCurrentValue.DateValue
                                 && obj.MeteringDeviceValue == Convert.ToDecimal(tmpCurrentValue.MeteringValue))))
                             {
-                                db.spInsertMeteringDeviceHistory(item.GUID,
-                                    Convert.ToDecimal(tmpCurrentValue.MeteringValue),
-                                    tmpCurrentValue.DateValue);
-                                Console.WriteLine("Metering device value is synchronized");
+                                string res = UpdaterMeteringDeviceHistory.InsertMeteringDeviceHistory(item, tmpCurrentValue);
+                                Console.WriteLine(res);
                             }
                             else
                             {
@@ -282,17 +279,8 @@ namespace ResidentalCalc
                         && obj.Surname == ((_HouseManagementService.AccountIndExportType)tmpAccount.PayerInfo.Item).Surname
                         && obj.GrandName == ((_HouseManagementService.AccountIndExportType)tmpAccount.PayerInfo.Item).Patronymic)))
                         {
-                            var tmpAccountDetail = tmpAccount.PayerInfo as _HouseManagementService.AccountExportTypePayerInfo;
-                            var tmp = tmpAccountDetail.Item as _HouseManagementService.AccountIndExportType;
-                            db.spInsertPayerInfo(item.GUID,
-                                ((_HouseManagementService.AccountIndExportType)tmpAccount.PayerInfo.Item).Surname,
-                                ((_HouseManagementService.AccountIndExportType)tmpAccount.PayerInfo.Item).FirstName,
-                                ((_HouseManagementService.AccountIndExportType)tmpAccount.PayerInfo.Item).Patronymic ?? null,
-                                "11111111111",
-                                ((_HouseManagementService.AccountIndExportTypeID)tmp.Item).Series ?? null,
-                                ((_HouseManagementService.AccountIndExportTypeID)tmp.Item).Number ?? null,
-                                ((_HouseManagementService.AccountIndExportTypeID)tmp.Item).IssueDate);
-                            Console.WriteLine("Payer info is synchronized");
+                            string res = UpdaterPayerInfo.InsertPayerInfo(item, tmpAccount);
+                            Console.WriteLine(res);
                         }
                         else
                         {
