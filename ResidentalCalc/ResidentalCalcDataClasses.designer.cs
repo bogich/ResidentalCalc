@@ -213,13 +213,6 @@ namespace ResidentalCalc
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.spInsertSupplyResourceContract")]
-		public int spInsertSupplyResourceContract([global::System.Data.Linq.Mapping.ParameterAttribute(Name="ContractNumber", DbType="NVarChar(100)")] string contractNumber, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="SigningDateStart", DbType="Date")] System.Nullable<System.DateTime> signingDateStart, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="SigningDateEnd", DbType="Date")] System.Nullable<System.DateTime> signingDateEnd, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ContractState", DbType="Bit")] System.Nullable<bool> contractState, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="GIS_ContractRootGUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> gIS_ContractRootGUID)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), contractNumber, signingDateStart, signingDateEnd, contractState, gIS_ContractRootGUID);
-			return ((int)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.spCreateChargeInfo", IsComposable=true)]
 		public object spCreateChargeInfo([global::System.Data.Linq.Mapping.ParameterAttribute(Name="RowGUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> rowGUID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountGUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> accountGUID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="CalculationMonth", DbType="Int")] System.Nullable<int> calculationMonth, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="CalculationYear", DbType="Int")] System.Nullable<int> calculationYear)
 		{
@@ -237,13 +230,6 @@ namespace ResidentalCalc
 		public int spInsertCalculationData([global::System.Data.Linq.Mapping.ParameterAttribute(Name="RowGUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> rowGUID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountIndividualServicesGUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> accountIndividualServicesGUID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="MeteringDeviceGUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> meteringDeviceGUID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="CalculationResult", DbType="Decimal(18,2)")] System.Nullable<decimal> calculationResult, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="CalculationVolume", DbType="Decimal(18,2)")] System.Nullable<decimal> calculationVolume, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="VolumeDeterminingMethod", DbType="NVarChar(1)")] string volumeDeterminingMethod)
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), rowGUID, accountIndividualServicesGUID, meteringDeviceGUID, calculationResult, calculationVolume, volumeDeterminingMethod);
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.spInsertMeteringDevice")]
-		public int spInsertMeteringDevice([global::System.Data.Linq.Mapping.ParameterAttribute(Name="ObjectAddressGUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> objectAddressGUID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="MeteringDeviceModel", DbType="NVarChar(100)")] string meteringDeviceModel, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="MeteringDeviceStamp", DbType="NVarChar(100)")] string meteringDeviceStamp, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="MeteringDeviceNumber", DbType="NVarChar(50)")] string meteringDeviceNumber, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="VerificationInterval", DbType="Int")] System.Nullable<int> verificationInterval, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="InstallationDate", DbType="Date")] System.Nullable<System.DateTime> installationDate, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="VerificationDate", DbType="Date")] System.Nullable<System.DateTime> verificationDate, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="GIS_MeteringDeviceGUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> gIS_MeteringDeviceGUID)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), objectAddressGUID, meteringDeviceModel, meteringDeviceStamp, meteringDeviceNumber, verificationInterval, installationDate, verificationDate, gIS_MeteringDeviceGUID);
 			return ((int)(result.ReturnValue));
 		}
 		
@@ -265,13 +251,6 @@ namespace ResidentalCalc
 		public int spInsertPayerInfo([global::System.Data.Linq.Mapping.ParameterAttribute(Name="AccountGUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> accountGUID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Surname", DbType="NVarChar(50)")] string surname, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Name", DbType="NVarChar(50)")] string name, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="GrandName", DbType="NVarChar(50)")] string grandName, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="SNILS", DbType="NVarChar(11)")] string sNILS, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Series", DbType="NVarChar(10)")] string series, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Number", DbType="NVarChar(10)")] string number, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="IssueDate", DbType="Date")] System.Nullable<System.DateTime> issueDate)
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountGUID, surname, name, grandName, sNILS, series, number, issueDate);
-			return ((int)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.spInsertRefNsiService51")]
-		public int spInsertRefNsiService51([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Code", DbType="NVarChar(20)")] string code, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="GUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> gUID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="IsActual", DbType="Bit")] System.Nullable<bool> isActual, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Value", DbType="NVarChar(50)")] string value)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), code, gUID, isActual, value);
 			return ((int)(result.ReturnValue));
 		}
 		
@@ -342,6 +321,27 @@ namespace ResidentalCalc
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), accountGUID, calculationMonth, calculationYear);
 			return ((int)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.spInsertRefNsiService51")]
+		public int spInsertRefNsiService51([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Code", DbType="NVarChar(20)")] string code, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="GUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> gUID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="IsActual", DbType="Bit")] System.Nullable<bool> isActual, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Value", DbType="NVarChar(50)")] string value, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="GIS_Modified", DbType="Date")] System.Nullable<System.DateTime> gIS_Modified)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), code, gUID, isActual, value, gIS_Modified);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.spInsertMeteringDevice")]
+		public int spInsertMeteringDevice([global::System.Data.Linq.Mapping.ParameterAttribute(Name="ObjectAddressGUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> objectAddressGUID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="MeteringDeviceModel", DbType="NVarChar(100)")] string meteringDeviceModel, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="MeteringDeviceStamp", DbType="NVarChar(100)")] string meteringDeviceStamp, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="MeteringDeviceNumber", DbType="NVarChar(50)")] string meteringDeviceNumber, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="VerificationInterval", DbType="Int")] System.Nullable<int> verificationInterval, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="InstallationDate", DbType="Date")] System.Nullable<System.DateTime> installationDate, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="VerificationDate", DbType="Date")] System.Nullable<System.DateTime> verificationDate, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="GIS_MeteringDeviceGUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> gIS_MeteringDeviceGUID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="GIS_VersionNumber", DbType="Int")] System.Nullable<int> gIS_VersionNumber)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), objectAddressGUID, meteringDeviceModel, meteringDeviceStamp, meteringDeviceNumber, verificationInterval, installationDate, verificationDate, gIS_MeteringDeviceGUID, gIS_VersionNumber);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.spInsertSupplyResourceContract")]
+		public int spInsertSupplyResourceContract([global::System.Data.Linq.Mapping.ParameterAttribute(Name="ContractNumber", DbType="NVarChar(100)")] string contractNumber, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="SigningDateStart", DbType="Date")] System.Nullable<System.DateTime> signingDateStart, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="SigningDateEnd", DbType="Date")] System.Nullable<System.DateTime> signingDateEnd, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="ContractState", DbType="Bit")] System.Nullable<bool> contractState, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="GIS_ContractRootGUID", DbType="UniqueIdentifier")] System.Nullable<System.Guid> gIS_ContractRootGUID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="GIS_VersionNumber", DbType="Int")] System.Nullable<int> gIS_VersionNumber)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), contractNumber, signingDateStart, signingDateEnd, contractState, gIS_ContractRootGUID, gIS_VersionNumber);
+			return ((int)(result.ReturnValue));
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.SupplyResourceContract")]
@@ -361,6 +361,8 @@ namespace ResidentalCalc
 		private bool _ContractState;
 		
 		private System.Nullable<System.Guid> _GIS_ContractRootGUID;
+		
+		private System.Nullable<int> _GIS_VersionNumber;
 		
 		private EntitySet<ObjectAddress> _ObjectAddress;
 		
@@ -382,6 +384,8 @@ namespace ResidentalCalc
     partial void OnContractStateChanged();
     partial void OnGIS_ContractRootGUIDChanging(System.Nullable<System.Guid> value);
     partial void OnGIS_ContractRootGUIDChanged();
+    partial void OnGIS_VersionNumberChanging(System.Nullable<int> value);
+    partial void OnGIS_VersionNumberChanged();
     #endregion
 		
 		public SupplyResourceContract()
@@ -507,6 +511,26 @@ namespace ResidentalCalc
 					this._GIS_ContractRootGUID = value;
 					this.SendPropertyChanged("GIS_ContractRootGUID");
 					this.OnGIS_ContractRootGUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GIS_VersionNumber", DbType="Int")]
+		public System.Nullable<int> GIS_VersionNumber
+		{
+			get
+			{
+				return this._GIS_VersionNumber;
+			}
+			set
+			{
+				if ((this._GIS_VersionNumber != value))
+				{
+					this.OnGIS_VersionNumberChanging(value);
+					this.SendPropertyChanging();
+					this._GIS_VersionNumber = value;
+					this.SendPropertyChanged("GIS_VersionNumber");
+					this.OnGIS_VersionNumberChanged();
 				}
 			}
 		}
@@ -885,6 +909,8 @@ namespace ResidentalCalc
 		
 		private System.Nullable<System.Guid> _GIS_MeteringDeviceGUID;
 		
+		private System.Nullable<int> _GIS_VersionNumber;
+		
 		private EntitySet<MeteringDeviceHistory> _MeteringDeviceHistory;
 		
 		private EntitySet<ChargeInfo> _ChargeInfo;
@@ -913,6 +939,8 @@ namespace ResidentalCalc
     partial void OnVerificationDateChanged();
     partial void OnGIS_MeteringDeviceGUIDChanging(System.Nullable<System.Guid> value);
     partial void OnGIS_MeteringDeviceGUIDChanged();
+    partial void OnGIS_VersionNumberChanging(System.Nullable<int> value);
+    partial void OnGIS_VersionNumberChanged();
     #endregion
 		
 		public MeteringDevice()
@@ -1103,6 +1131,26 @@ namespace ResidentalCalc
 					this._GIS_MeteringDeviceGUID = value;
 					this.SendPropertyChanged("GIS_MeteringDeviceGUID");
 					this.OnGIS_MeteringDeviceGUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GIS_VersionNumber", DbType="Int")]
+		public System.Nullable<int> GIS_VersionNumber
+		{
+			get
+			{
+				return this._GIS_VersionNumber;
+			}
+			set
+			{
+				if ((this._GIS_VersionNumber != value))
+				{
+					this.OnGIS_VersionNumberChanging(value);
+					this.SendPropertyChanging();
+					this._GIS_VersionNumber = value;
+					this.SendPropertyChanged("GIS_VersionNumber");
+					this.OnGIS_VersionNumberChanged();
 				}
 			}
 		}
@@ -1977,6 +2025,8 @@ namespace ResidentalCalc
 		
 		private string _Value;
 		
+		private System.Nullable<System.DateTime> _GIS_Modified;
+		
 		private EntitySet<RefServices> _RefServices;
 		
     #region Определения метода расширяемости
@@ -1993,6 +2043,8 @@ namespace ResidentalCalc
     partial void OnIsActualChanged();
     partial void OnValueChanging(string value);
     partial void OnValueChanged();
+    partial void OnGIS_ModifiedChanging(System.Nullable<System.DateTime> value);
+    partial void OnGIS_ModifiedChanged();
     #endregion
 		
 		public RefNsiService51()
@@ -2097,6 +2149,26 @@ namespace ResidentalCalc
 					this._Value = value;
 					this.SendPropertyChanged("Value");
 					this.OnValueChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GIS_Modified", DbType="Date")]
+		public System.Nullable<System.DateTime> GIS_Modified
+		{
+			get
+			{
+				return this._GIS_Modified;
+			}
+			set
+			{
+				if ((this._GIS_Modified != value))
+				{
+					this.OnGIS_ModifiedChanging(value);
+					this.SendPropertyChanging();
+					this._GIS_Modified = value;
+					this.SendPropertyChanged("GIS_Modified");
+					this.OnGIS_ModifiedChanged();
 				}
 			}
 		}

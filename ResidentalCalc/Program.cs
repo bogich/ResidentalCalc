@@ -3,19 +3,28 @@ using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Linq;
+
 using ResidentalCalc.Helpers.HelperHouseManagementService;
 using ResidentalCalc.Helpers.HelperDeviceMeteringService;
 using ResidentalCalc.Helpers.HelperBillService;
 using ResidentalCalc.Helpers.HelperNsiService;
+
 using _HouseManagementService = ResidentalCalc.Infrastructure.HouseManagementService;
 using _DeviceMeteringService = ResidentalCalc.Infrastructure.DeviceMeteringService;
 using _NsiService = ResidentalCalc.Infrastructure.NsiService;
 using _BillsService = ResidentalCalc.Infrastructure.BillsService;
 
+using ResidentalCalc.Updaters.UpdaterRefNsiService51;
+using ResidentalCalc.Updaters.UpdaterMeteringDevice;
+using ResidentalCalc.Updaters.UpdaterSupplyResourceContract;
+using ResidentalCalc.Updaters.UpdaterObjectAddress;
+
 namespace ResidentalCalc
 {
     class Program
     {
+        public static ResidentalCalcDataClassesDataContext db = new ResidentalCalcDataClassesDataContext();
+
         //private const string _orgPPAGUID = "04b83d24-6daa-47f9-bb4f-ce9330c3094d"; //Prod 
         private const string _orgPPAGUID = "73075d22-be00-47c3-ad82-e95be27ac276"; // SIT01
         static string _ExportContractRootGUID;
@@ -27,8 +36,6 @@ namespace ResidentalCalc
             HelperDeviceMeteringService helperDeviceMeteringService = new HelperDeviceMeteringService();
             HelperNsiService helperNsiService = new HelperNsiService();
             HelperBillService helperBillService = new HelperBillService();
-
-            ResidentalCalcDataClassesDataContext db = new ResidentalCalcDataClassesDataContext();
             
             #region Синхронизируем справочник 51 Коммунальные услуги
             Table<RefNsiService51> refNsiService51 = db.GetTable<RefNsiService51>();
@@ -37,28 +44,23 @@ namespace ResidentalCalc
             var nsiElement = itemNsiReference51.Item as _NsiService.NsiItemType;
             foreach(var itemNsiElement in nsiElement.NsiElement)
             {
-                if(!(refNsiService51.Any(obj => obj.Code == itemNsiElement.Code
-                && obj.GUID == Guid.Parse(itemNsiElement.GUID))))
+                if(!(refNsiService51.Any(obj => obj.GUID == Guid.Parse(itemNsiElement.GUID))))
                 {
-                    db.spInsertRefNsiService51(itemNsiElement.Code,
-                        Guid.Parse(itemNsiElement.GUID),
-                        itemNsiElement.IsActual,
-                        ((_NsiService.NsiElementStringFieldType)itemNsiElement.NsiElementField[1]).Value);
-                    Console.WriteLine("NsiService51 is synchronized");
+                    string res = UpdaterRefNsiService51.InsertElementNsiReference51(itemNsiElement);
+                    Console.WriteLine(res);
                 }
                 else
                 {
                     foreach(var itemRef in refNsiService51.Where(s => s.GUID == Guid.Parse(itemNsiElement.GUID)))
                     {
-                        if(itemRef.IsActual != itemNsiElement.IsActual)
+                        if(itemNsiElement.Items[0].Date.Equals(itemRef.GIS_Modified))
                         {
-                            itemRef.IsActual = itemNsiElement.IsActual;
-                            db.SubmitChanges();
-                            Console.WriteLine("Item is correct");
+                            Console.WriteLine("NsiService51 already exist");
                         }
                         else
                         {
-                            Console.WriteLine("NsiService51 already exist");
+                            string res = UpdaterRefNsiService51.UpdateElementNsiReference51(itemRef, itemNsiElement);
+                            Console.WriteLine(res);
                         }
                     }
                 }
@@ -77,21 +79,27 @@ namespace ResidentalCalc
                     if (tmpSupplyResourceContract.GetType() == typeof(_HouseManagementService.exportSupplyResourceContractResultType))
                     {
                         var tmpExportSupplyResourceContract = tmpSupplyResourceContract as _HouseManagementService.exportSupplyResourceContractResultType;
-                        if (tmpExportSupplyResourceContract.VersionStatus == _HouseManagementService.exportSupplyResourceContractResultTypeVersionStatus.Posted
-                            && tmpExportSupplyResourceContract.Item1.GetType() == typeof(_HouseManagementService.ExportSupplyResourceContractTypeApartmentBuildingOwner))
+                        if (tmpExportSupplyResourceContract.Item1.GetType() == typeof(_HouseManagementService.ExportSupplyResourceContractTypeApartmentBuildingOwner))
                         {
                             if(!(supplyResourceContracts.Any(obj => obj.GIS_ContractRootGUID == Guid.Parse(tmpExportSupplyResourceContract.ContractRootGUID))))
                             {
-                                db.spInsertSupplyResourceContract(((_HouseManagementService.ExportSupplyResourceContractTypeIsContract)tmpExportSupplyResourceContract.Item).ContractNumber,
-                                    ((_HouseManagementService.ExportSupplyResourceContractTypeIsContract)tmpExportSupplyResourceContract.Item).SigningDate,
-                                    DateTime.Parse("2079-01-01"),
-                                    true,
-                                    Guid.Parse(tmpExportSupplyResourceContract.ContractRootGUID));
-                                Console.WriteLine("Contract is synchronized");
+                                string res = UpdaterSupplyResourceContract.InsertSupplyResourceContract(tmpExportSupplyResourceContract);
+                                Console.WriteLine(res);
                             }
                             else
                             {
-                                Console.WriteLine("Contract already exist");
+                                foreach(var elementContract in supplyResourceContracts.Where(s => s.GIS_ContractRootGUID == Guid.Parse(tmpExportSupplyResourceContract.ContractRootGUID)))
+                                {
+                                    if(tmpExportSupplyResourceContract.VersionNumber.Equals(elementContract.GIS_VersionNumber.ToString()))
+                                    {
+                                        Console.WriteLine("Supply resource contract already exist");
+                                    }
+                                    else
+                                    {
+                                        string res = UpdaterSupplyResourceContract.UpdateSupplyResourceContract(elementContract, tmpExportSupplyResourceContract);
+                                        Console.WriteLine(res);
+                                    }
+                                }
                             }
                         }
                     }
@@ -150,12 +158,8 @@ namespace ResidentalCalc
                         if(!(objectAddresses.Any(obj => obj.GIS_ObjectGUID == Guid.Parse(tmpItemObjectAddress.ObjectGUID)
                         && obj.SupplyResourceContractGUID == item.GUID)))
                         {
-                            db.spInsertObjectAddress(Guid.Parse(item.GUID.ToString()),
-                                Guid.Parse(tmpItemObjectAddress.FIASHouseGuid.ToString()),
-                                tmpItemObjectAddress.ApartmentNumber,
-                                tmpItemObjectAddress.RoomNumber,
-                                Guid.Parse(tmpItemObjectAddress.ObjectGUID));
-                            Console.WriteLine("Object address is synchronized");
+                            string res = UpdaterObjectAddress.InsertObjectAddress(item, tmpItemObjectAddress);
+                            Console.WriteLine(res);
                         }
                         else
                         {
@@ -208,19 +212,23 @@ namespace ResidentalCalc
                         if(!(meteringDevice.Any(obj => obj.GIS_MeteringDeviceGUID == Guid.Parse(tmpMeterongDevice.MeteringDeviceRootGUID)
                         && obj.ObjectAddressGUID == item.GUID)))
                         {
-                            db.spInsertMeteringDevice(Guid.Parse(item.GUID.ToString()),
-                                tmpMeterongDevice.BasicChatacteristicts.MeteringDeviceModel,
-                                tmpMeterongDevice.BasicChatacteristicts.MeteringDeviceStamp,
-                                tmpMeterongDevice.BasicChatacteristicts.MeteringDeviceNumber,
-                                6,
-                                tmpMeterongDevice.BasicChatacteristicts.InstallationDate,
-                                tmpMeterongDevice.BasicChatacteristicts.FirstVerificationDate,
-                                Guid.Parse(tmpMeterongDevice.MeteringDeviceRootGUID));
-                            Console.WriteLine("Metering device is synchronized");
+                            string res = UpdaterMeteringDevice.InsertMeteringDevice(tmpMeterongDevice, item);
+                            Console.WriteLine(res);
                         }
                         else
                         {
-                            Console.WriteLine("Metering device already exist");
+                            foreach(var elementMeteringDevice in meteringDevice.Where(s => s.GIS_MeteringDeviceGUID == Guid.Parse(tmpMeterongDevice.MeteringDeviceRootGUID)))
+                            {
+                                if (tmpMeterongDevice.VersionNumber.Equals(elementMeteringDevice.GIS_VersionNumber.ToString()))
+                                {
+                                    Console.WriteLine("Metering device already exist");
+                                }
+                                else
+                                {
+                                    string res = UpdaterMeteringDevice.UpdateMeteringDevice(elementMeteringDevice, tmpMeterongDevice);
+                                    Console.WriteLine(res);
+                                }
+                            }
                         }
                     }
                 }

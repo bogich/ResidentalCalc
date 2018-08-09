@@ -8,6 +8,7 @@
       <Column Name="SigningDateEnd" Type="System.DateTime" DbType="Date" CanBeNull="true" />
       <Column Name="ContractState" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="GIS_ContractRootGUID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="GIS_VersionNumber" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="SupplyResourceContract_ObjectAddress" Member="ObjectAddress" ThisKey="GUID" OtherKey="SupplyResourceContractGUID" Type="ObjectAddress" />
       <Association Name="SupplyResourceContract_ContractSubject" Member="ContractSubject" ThisKey="GUID" OtherKey="SupplyResourceContractGUID" Type="ContractSubject" />
     </Type>
@@ -36,6 +37,7 @@
       <Column Name="InstallationDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
       <Column Name="VerificationDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
       <Column Name="GIS_MeteringDeviceGUID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="GIS_VersionNumber" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="MeteringDevice_MeteringDeviceHistory" Member="MeteringDeviceHistory" ThisKey="GUID" OtherKey="MeteringDeviceGUID" Type="MeteringDeviceHistory" />
       <Association Name="MeteringDevice_ChargeInfo" Member="ChargeInfo" ThisKey="GUID" OtherKey="MeteringDeviceGUID" Type="ChargeInfo" />
       <Association Name="ObjectAddress_MeteringDevice" Member="ObjectAddress" ThisKey="ObjectAddressGUID" OtherKey="GUID" Type="ObjectAddress" IsForeignKey="true" />
@@ -84,6 +86,7 @@
       <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
       <Column Name="IsActual" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="Value" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="GIS_Modified" Type="System.DateTime" DbType="Date" CanBeNull="true" />
       <Association Name="RefNsiService51_RefServices" Member="RefServices" ThisKey="ID" OtherKey="NsiService51ID" Type="RefServices" />
     </Type>
   </Table>
@@ -162,14 +165,6 @@
       <Association Name="Accounts_Calculation" Member="Accounts" ThisKey="AccountGUID" OtherKey="GUID" Type="Accounts" IsForeignKey="true" />
     </Type>
   </Table>
-  <Function Name="dbo.spInsertSupplyResourceContract" Method="spInsertSupplyResourceContract">
-    <Parameter Name="ContractNumber" Parameter="contractNumber" Type="System.String" DbType="NVarChar(100)" />
-    <Parameter Name="SigningDateStart" Parameter="signingDateStart" Type="System.DateTime" DbType="Date" />
-    <Parameter Name="SigningDateEnd" Parameter="signingDateEnd" Type="System.DateTime" DbType="Date" />
-    <Parameter Name="ContractState" Parameter="contractState" Type="System.Boolean" DbType="Bit" />
-    <Parameter Name="GIS_ContractRootGUID" Parameter="gIS_ContractRootGUID" Type="System.Guid" DbType="UniqueIdentifier" />
-    <Return Type="System.Int32" />
-  </Function>
   <Function Name="dbo.spCreateChargeInfo" Method="spCreateChargeInfo" IsComposable="true">
     <Parameter Name="RowGUID" Parameter="rowGUID" Type="System.Guid" DbType="UniqueIdentifier" />
     <Parameter Name="AccountGUID" Parameter="accountGUID" Type="System.Guid" DbType="UniqueIdentifier" />
@@ -192,17 +187,6 @@
     <Parameter Name="CalculationResult" Parameter="calculationResult" Type="System.Decimal" DbType="Decimal(18,2)" />
     <Parameter Name="CalculationVolume" Parameter="calculationVolume" Type="System.Decimal" DbType="Decimal(18,2)" />
     <Parameter Name="VolumeDeterminingMethod" Parameter="volumeDeterminingMethod" Type="System.String" DbType="NVarChar(1)" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.spInsertMeteringDevice" Method="spInsertMeteringDevice">
-    <Parameter Name="ObjectAddressGUID" Parameter="objectAddressGUID" Type="System.Guid" DbType="UniqueIdentifier" />
-    <Parameter Name="MeteringDeviceModel" Parameter="meteringDeviceModel" Type="System.String" DbType="NVarChar(100)" />
-    <Parameter Name="MeteringDeviceStamp" Parameter="meteringDeviceStamp" Type="System.String" DbType="NVarChar(100)" />
-    <Parameter Name="MeteringDeviceNumber" Parameter="meteringDeviceNumber" Type="System.String" DbType="NVarChar(50)" />
-    <Parameter Name="VerificationInterval" Parameter="verificationInterval" Type="System.Int32" DbType="Int" />
-    <Parameter Name="InstallationDate" Parameter="installationDate" Type="System.DateTime" DbType="Date" />
-    <Parameter Name="VerificationDate" Parameter="verificationDate" Type="System.DateTime" DbType="Date" />
-    <Parameter Name="GIS_MeteringDeviceGUID" Parameter="gIS_MeteringDeviceGUID" Type="System.Guid" DbType="UniqueIdentifier" />
     <Return Type="System.Int32" />
   </Function>
   <Function Name="dbo.spInsertMeteringDeviceHistory" Method="spInsertMeteringDeviceHistory">
@@ -228,13 +212,6 @@
     <Parameter Name="Series" Parameter="series" Type="System.String" DbType="NVarChar(10)" />
     <Parameter Name="Number" Parameter="number" Type="System.String" DbType="NVarChar(10)" />
     <Parameter Name="IssueDate" Parameter="issueDate" Type="System.DateTime" DbType="Date" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.spInsertRefNsiService51" Method="spInsertRefNsiService51">
-    <Parameter Name="Code" Parameter="code" Type="System.String" DbType="NVarChar(20)" />
-    <Parameter Name="GUID" Parameter="gUID" Type="System.Guid" DbType="UniqueIdentifier" />
-    <Parameter Name="IsActual" Parameter="isActual" Type="System.Boolean" DbType="Bit" />
-    <Parameter Name="Value" Parameter="value" Type="System.String" DbType="NVarChar(50)" />
     <Return Type="System.Int32" />
   </Function>
   <Function Name="dbo.fnIsMeteringDevice" Method="fnIsMeteringDevice" IsComposable="true">
@@ -305,6 +282,35 @@
     <Parameter Name="AccountGUID" Parameter="accountGUID" Type="System.Guid" DbType="UniqueIdentifier" />
     <Parameter Name="CalculationMonth" Parameter="calculationMonth" Type="System.Int32" DbType="Int" />
     <Parameter Name="CalculationYear" Parameter="calculationYear" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spInsertRefNsiService51" Method="spInsertRefNsiService51">
+    <Parameter Name="Code" Parameter="code" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="GUID" Parameter="gUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="IsActual" Parameter="isActual" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Value" Parameter="value" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="GIS_Modified" Parameter="gIS_Modified" Type="System.DateTime" DbType="Date" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spInsertMeteringDevice" Method="spInsertMeteringDevice">
+    <Parameter Name="ObjectAddressGUID" Parameter="objectAddressGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="MeteringDeviceModel" Parameter="meteringDeviceModel" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="MeteringDeviceStamp" Parameter="meteringDeviceStamp" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="MeteringDeviceNumber" Parameter="meteringDeviceNumber" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="VerificationInterval" Parameter="verificationInterval" Type="System.Int32" DbType="Int" />
+    <Parameter Name="InstallationDate" Parameter="installationDate" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="VerificationDate" Parameter="verificationDate" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="GIS_MeteringDeviceGUID" Parameter="gIS_MeteringDeviceGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="GIS_VersionNumber" Parameter="gIS_VersionNumber" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spInsertSupplyResourceContract" Method="spInsertSupplyResourceContract">
+    <Parameter Name="ContractNumber" Parameter="contractNumber" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="SigningDateStart" Parameter="signingDateStart" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="SigningDateEnd" Parameter="signingDateEnd" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="ContractState" Parameter="contractState" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="GIS_ContractRootGUID" Parameter="gIS_ContractRootGUID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="GIS_VersionNumber" Parameter="gIS_VersionNumber" Type="System.Int32" DbType="Int" />
     <Return Type="System.Int32" />
   </Function>
 </Database>
