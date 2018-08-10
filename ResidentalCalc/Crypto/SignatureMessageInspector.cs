@@ -26,9 +26,10 @@ namespace ResidentalCalc.Crypto
 
 			string st = GetSignElement(MessageString(ref request));
 
-			//place for log request
+            //place for log request
+            //File.AppendAllText(@"LogRequest.txt", st + Environment.NewLine, Encoding.Default);
 
-			request = CreateMessageFromString(st, request.Version);
+            request = CreateMessageFromString(st, request.Version);
 
 			return null;
 		}
@@ -37,9 +38,10 @@ namespace ResidentalCalc.Crypto
 		{
 			string st = MessageString(ref reply);
 
-			//place for log response
+            //place for log response
+            //File.AppendAllText(@"LogResponce.txt", st + Environment.NewLine, Encoding.Default);
 
-			reply = CreateMessageFromString(st, reply.Version);
+            reply = CreateMessageFromString(st, reply.Version);
 		}
 
 		public static string GetSignElement(string messageString)
